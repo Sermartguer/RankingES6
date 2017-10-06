@@ -18,5 +18,14 @@ class Person {
   addPoints(points) {
         this.points += points;
   }
+  restpoints(points) {
+    this.points -= points;
+}
+getpoints(){
+  return this.points;
+}
+setPoints(points){
+  this.points = points;
+}
 }
 export default Person;

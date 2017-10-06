@@ -18,7 +18,6 @@ gulp.task("default", function () {
     browserify("./src/main.js")
       .transform("babelify", {presets: ["es2015"]})
       .bundle()
-      .pipe(minify())
       .pipe(fs.createWriteStream("bin/main.js"));
     });
   
