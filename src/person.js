@@ -21,11 +21,11 @@ class Person {
   restpoints(points) {
     this.points -= points;
 }
-getpoints(){
+  getpoints(){
   return this.points;
 }
-setPoints(points){
+  setPoints(points){
   this.points = points;
-}
+  }
 }
 export default Person;
