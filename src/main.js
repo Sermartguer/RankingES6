@@ -5,6 +5,7 @@
   //Array declaration
   var valorinput=[];
   var students = [
+    
     new Person("Paco", "Vañó", 5),
     new Person("Lucia ", "Botella", 10),
     new Person("German", "Ojeda", 3),
@@ -41,7 +42,9 @@ function getRanking(students) {
     studentsEl.appendChild(liEl);
     liEl.appendChild(addPointsEl);
 
-    itemstask.forEach(function(itemtask){    
+    
+    itemstask.forEach(function(itemtask){
+      
       var input = document.createElement("input");
       input.setAttribute("id",cont);
       input.setAttribute("name",cont);
@@ -67,11 +70,34 @@ function getRanking(students) {
 }
 //ONLOAD
 window.onload = function() {
+  
   start();
   getRanking(students);
   clicktask();
+  titles();
 }
 
+function titles(u){
+  var titless = document.getElementById("demo");
+  if (u===undefined){
+    for (var a=0;a<students.length;a++){
+      var ty=itemstask[a].title;
+      var newstrong = document.createElement("strong");
+      var t = document.createTextNode(ty);
+      newstrong.appendChild(t);
+      titless.appendChild(newstrong);
+      //titless.innerText=titless.innerText+" "+ty;
+    }
+
+    }else{
+      var newstrong = document.createElement("strong");
+      var t = document.createTextNode(u);
+      newstrong.appendChild(t);
+      titless.appendChild(newstrong);
+  }
+
+ 
+}
 //Click task
 function clicktask(){
   document.getElementById("bt").addEventListener("click", function(){
@@ -86,6 +112,7 @@ function clicktask(){
     console.log(leng);
     start(itemstask[leng-1].title);
     getRanking(students);
+    titles(itemstask[leng-1].title);
   });
 }
 
