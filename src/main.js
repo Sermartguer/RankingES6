@@ -1,9 +1,8 @@
-
   import Person from './person.js';
   import Task from './task.js';
   
   //Array declaration
-  var valorinput=[];
+  var tasksvalues=[];
   var students = [
     
     new Person("Paco", "Vañó", 5),
@@ -12,17 +11,14 @@
     new Person("Salva", "Peris", 1),
     new Person("Oscar", "Carrion", 40),
   ];
-  var itemstask = [ 
+  var tasks = [ 
     new Task("exam"),
     new Task("task")
   ];
 
 //GETRANKING FUNCTION
 function getRanking(students) {
-  students.sort(function(a, b) {
-    return (b.points - a.points)
-  });
-  
+  order(students);
   var studentsEl = document.getElementById("res");
   while (studentsEl.firstChild) {
     studentsEl.removeChild(studentsEl.firstChild);
@@ -40,135 +36,141 @@ function getRanking(students) {
     
     addPointsEl.appendChild(tb);
     studentsEl.appendChild(liEl);
+    addPointsEl.setAttribute("id",cont);
     liEl.appendChild(addPointsEl);
 
     
-    itemstask.forEach(function(itemtask){
+    tasks.forEach(function(itemtask){
       
       var input = document.createElement("input");
+      var idinput= tasksvalues[cont][itemtask.title];
+      
       input.setAttribute("id",cont);
       input.setAttribute("name",cont);
-      var idd= valorinput[cont][itemtask.title];
-      input.setAttribute(itemtask.title,idd);
-      input.setAttribute("default", idd);
-      input.setAttribute("value",idd);
+      input.setAttribute(itemtask.title,idinput);
+      input.setAttribute("value",idinput);
       var previusvalue = input.value;
+
       liEl.appendChild(input);
 
       //Onchange inputs
       input.addEventListener("change", function(){
-        myFunction(input.id,input.name,itemtask.title,input.value,previusvalue);
+        var integer = parseInt(input.value);
+        integer = Number.isInteger(integer);
+        console.log(integer);
+        if (integer){
+          changeValues(input.id,input.name,itemtask.title,input.value,previusvalue);
+        }else{
+          input.value="0";
+        }
+        
       });
     });
     
     //Onclick button +20
     addPointsEl.addEventListener("click", function() {
       studentItem.addPoints(20);
+      var idddd = addPointsEl.id;
+      tasksvalues[idddd].points=+20;
+      order(tasksvalues);
       setTimeout(function(){getRanking(students)},1000);
     });
   });
 }
 //ONLOAD
 window.onload = function() {
-  
   start();
   getRanking(students);
   clicktask();
   titles();
 }
 
-function titles(u){
-  var titless = document.getElementById("demo");
-  if (u===undefined){
+function titles(newtitle){
+  var titles = document.getElementById("demo");
+  if (newtitle===undefined){
     for (var a=0;a<students.length;a++){
-      var ty=itemstask[a].title;
+      var ty=tasks[a].title;
       var newstrong = document.createElement("strong");
       var t = document.createTextNode(ty);
       newstrong.appendChild(t);
-      titless.appendChild(newstrong);
-      //titless.innerText=titless.innerText+" "+ty;
+      titles.appendChild(newstrong);
     }
 
     }else{
       var newstrong = document.createElement("strong");
-      var t = document.createTextNode(u);
+      var t = document.createTextNode(newtitle);
       newstrong.appendChild(t);
-      titless.appendChild(newstrong);
+      titles.appendChild(newstrong);
   }
-
- 
 }
+
 //Click task
 function clicktask(){
+  var taskname = document.getElementById("taskname");
   document.getElementById("bt").addEventListener("click", function(){
-    document.getElementById("taskname").style.visibility="visible";
+    taskname.style.visibility="visible";
   });
   document.getElementById("taskname").addEventListener("change", function(){
-    itemstask.push(new Task(document.getElementById("taskname").value));
-    document.getElementById("taskname").style.visibility="hidden";
-    document.getElementById("taskname").value="";
-    console.log(itemstask.length);
-    var leng = itemstask.length;
-    console.log(leng);
-    start(itemstask[leng-1].title);
+    tasks.push(new Task(taskname.value));
+    taskname.style.visibility="hidden";
+    taskname.value="";
+    start(tasks[tasks.length-1].title);
     getRanking(students);
-    titles(itemstask[leng-1].title);
+    titles(tasks[tasks.length-1].title);
   });
 }
 
 function start(last){
-  console.log(last);
+  var aq=-1;
+  var key3;
   if(last===undefined){
     students.sort(function(a, b) {
       return (b.points - a.points)
     });
-    for(var l=0;l<valorinput.length;l++){
-      delete valorinput[l];
+    for(var i=0;i<tasksvalues.length;i++){
+      delete tasksvalues[i];
     }
-    valorinput = [];
-    var aq=-1;
-    var key3;
+
     students.forEach(function(studentItem) {
     aq++;
-    var i ={name:studentItem.name}
-    valorinput.push({i});
-    for(var y=0;y<itemstask.length;y++){
-      key3 = itemstask[y].title;
-      valorinput[aq][key3]=0;
+    tasksvalues.push({name:studentItem.name});
+
+    for(var i=0;i<tasks.length;i++){
+      key3 = tasks[i].title;
+      tasksvalues[aq][key3]=0;
     }
     var pointsstudent = studentItem.points;
-    valorinput[aq].points=pointsstudent;
-    valorinput.sort(function(a, b) {
+    tasksvalues[aq].points=pointsstudent;
+    tasksvalues.sort(function(a, b) {
       return (b.points - a.points)
     });
     });
-    console.log(valorinput);
+    console.log(tasksvalues);
+
   }else{
-    for(var l=0;l<valorinput.length;l++){
-      
-      valorinput[l][last]=0;
+
+    for(var l=0;l<tasksvalues.length;l++){
+      tasksvalues[l][last]=0;
     }
   }
-  
 }
+//changeValues (first substrac the previus value, and add the new points,finaly order the inputs)
+function changeValues(id,name,task,value,previusvalue){
+  var previusvalueparse = parseInt(previusvalue);
+  var input = document.getElementById(id);
+  var parsednewvalue = parseInt(value);
 
-
-
-//MYFUNCTION (first substrac the previus value, and add the new points,finaly order the inputs)
-function myFunction(id,name,task,value,previusvalue){
-
-  var prevparse = parseInt(previusvalue);
-  students[id].restpoints(prevparse);
-  var c = document.getElementById(id);
-  var v= c.getAttribute(task);
-  var t= task;
-  var parse = parseInt(value);
-  students[id].addPoints(parse);
-  valorinput[id][task]=parse;
-  valorinput[id].points=students[id].points;
-  valorinput.sort(function(a, b) {
+  students[id].restpoints(previusvalueparse);
+  students[id].addPoints(parsednewvalue);
+  tasksvalues[id][task]=parsednewvalue;
+  tasksvalues[id].points=students[id].points;
+  order(tasksvalues);
+  console.log(tasksvalues);  
+  setTimeout(function(){getRanking(students)},500);
+}
+function order(item){
+  //Order array tasksvalues
+  item.sort(function(a, b) {
     return (b.points - a.points)
-  });
-  console.log(valorinput);  
-  getRanking(students);
+  }); 
 }

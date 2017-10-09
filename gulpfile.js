@@ -9,7 +9,7 @@ var minify = require('gulp-minify');
 
 
 gulp.task("default", function () {
-    gulp.start(["browserify","webserver","watch"]);
+    gulp.start(["browserify","compress","webserver","watch"]);
   });
   if (!fs.existsSync('bin')){
     fs.mkdirSync('bin');
@@ -20,7 +20,19 @@ gulp.task("default", function () {
       .bundle()
       .pipe(fs.createWriteStream("bin/main.js"));
     });
-  
+
+    gulp.task('compress', function() {
+      gulp.src('bin/*.js')
+        .pipe(minify({
+            ext:{
+                src:'-debug.js',
+                min:'.js'
+            },
+            exclude: ['tasks'],
+            ignoreFiles: ['.combo.js', '-min.js']
+        }))
+        .pipe(gulp.dest('dist'))
+    });
   
     gulp.task('webserver', function() {
       gulp.src('./')

@@ -19,7 +19,9 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-browserify": "^0.5.1",
+    "gulp-js-minify": "0.0.3",
     "gulp-minify": "^1.0.0",
+    "gulp-uglify": "^3.0.0",
     "gulp-webserver": "^0.9.1"
   }
 }
