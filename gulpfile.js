@@ -3,13 +3,9 @@ const babel = require('gulp-babel');
 var browserify = require("browserify");
 var fs = require("fs");
 var webserver = require('gulp-webserver');
-var minify = require('gulp-minify');
-
-
-
 
 gulp.task("default", function () {
-    gulp.start(["browserify","compress","webserver","watch"]);
+    gulp.start(["browserify","webserver","watch"]);
   });
   if (!fs.existsSync('bin')){
     fs.mkdirSync('bin');
@@ -21,19 +17,6 @@ gulp.task("default", function () {
       .pipe(fs.createWriteStream("bin/main.js"));
     });
 
-    gulp.task('compress', function() {
-      gulp.src('bin/*.js')
-        .pipe(minify({
-            ext:{
-                src:'-debug.js',
-                min:'.js'
-            },
-            exclude: ['tasks'],
-            ignoreFiles: ['.combo.js', '-min.js']
-        }))
-        .pipe(gulp.dest('dist'))
-    });
-  
     gulp.task('webserver', function() {
       gulp.src('./')
       .pipe(webserver({

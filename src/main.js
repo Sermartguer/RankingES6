@@ -71,7 +71,8 @@ function getRanking(students) {
     addPointsEl.addEventListener("click", function() {
       studentItem.addPoints(20);
       var idddd = addPointsEl.id;
-      tasksvalues[idddd].points=+20;
+      var suma = tasksvalues[idddd].points+20;
+      tasksvalues[idddd].points=suma;
       order(tasksvalues);
       setTimeout(function(){getRanking(students)},1000);
     });
